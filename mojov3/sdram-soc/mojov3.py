@@ -72,7 +72,7 @@ class Platform(XilinxPlatform):
     default_clk_period = 1e9/50e6
 
     def __init__(self):
-        XilinxPlatform.__init__(self, "xc6slx9-2-tqg144", _io)
+        XilinxPlatform.__init__(self, "xc6slx9-3-tqg144", _io)
         self.toolchain.additional_commands = ["write_bitstream -force -bin_file {build_name}"]
 
     def do_finalize(self, fragment):
