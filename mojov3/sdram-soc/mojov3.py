@@ -123,9 +123,9 @@ class BaseSoC(SoCCore):
                 #module                  = MT48LC32M8(sys_clk_freq, "1:1"),
                 module                  = MT48LC32M8(sys_clk_freq, "1:2"),
                 origin                  = self.mem_map["main_ram"],
-                size                    = kwargs.get("max_sdram_size", 0x2000000),
-                l2_cache_size           = kwargs.get("l2_size", 8192),
-                l2_cache_min_data_width = kwargs.get("min_l2_data_width", 128),
+                size                    = 0x2000000,
+                l2_cache_size           = 1024,
+                l2_cache_min_data_width = 128,
                 l2_cache_reverse        = True
             )
 
