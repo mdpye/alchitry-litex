@@ -17,7 +17,7 @@ from litex.soc.cores import dna
 from litedram.modules import MT48LC32M8
 from litedram.phy import HalfRateGENSDRPHY, GENSDRPHY
 
-from ios import Led
+from litex.soc.cores.led import LedChaser
 
 import os
 import argparse
@@ -138,8 +138,9 @@ class BaseSoC(SoCCore):
         self.add_csr("dna")
 
         # Led
-        user_leds = Cat(*[platform.request("user_led", i) for i in range(8)])
-        self.submodules.leds = Led(user_leds)
+        self.submodules.leds = LedChaser(
+            pads         = platform.request_all("user_led"),
+            sys_clk_freq = sys_clk_freq)
         self.add_csr("leds")
 
 soc = BaseSoC()
