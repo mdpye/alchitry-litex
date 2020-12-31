@@ -104,7 +104,7 @@ class _CRG(Module):
 # SoC ----------------------------------------------------------------------------------------------
 
 class BaseSoC(SoCCore):
-    def __init__(self, sys_clk_freq=int(66666666), **kwargs):
+    def __init__(self, sys_clk_freq, **kwargs):
         platform = Platform()
 
         SoCCore.__init__(self, platform, sys_clk_freq,
@@ -143,14 +143,12 @@ class BaseSoC(SoCCore):
             sys_clk_freq = sys_clk_freq)
         self.add_csr("leds")
 
-soc = BaseSoC()
-
 # Build --------------------------------------------------------------------------------------------
 
 def main():
     parser = argparse.ArgumentParser(description="LiteX SoC on Mojo V3")
     parser.add_argument("--build",        action="store_true", help="Build bitstream")
-    parser.add_argument("--sys-clk-freq", default=66666666,   help="System clock frequency (default: 30 MHz)")
+    parser.add_argument("--sys-clk-freq", default=50e6,   help="System clock frequency")
 
     builder_args(parser)
     soc_sdram_args(parser)
