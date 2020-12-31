@@ -39,8 +39,8 @@ _io = [
 
     # uart
     ("serial", 0,
-        Subsignal("tx", Pins("P59")),
-        Subsignal("rx", Pins("P55")),
+        Subsignal("tx", Pins("P50")),
+        Subsignal("rx", Pins("P51")),
         IOStandard("LVTTL")
     ),
 
