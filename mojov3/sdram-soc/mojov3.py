@@ -85,8 +85,6 @@ class _CRG(Module):
     def __init__(self, platform, sys_clk_freq):
         self.clock_domains.cd_sys      = ClockDomain()
         self.clock_domains.cd_sys_ps   = ClockDomain(reset_less=True)
-        #self.clock_domains.cd_sys2x    = ClockDomain()
-        #self.clock_domains.cd_sys2x_ps = ClockDomain(reset_less=True)
 
         # PLL
         self.submodules.pll = pll = S6PLL(speedgrade=-2)
@@ -94,12 +92,9 @@ class _CRG(Module):
         pll.register_clkin(platform.request("clk50"), 50e6)
         pll.create_clkout(self.cd_sys,      sys_clk_freq)
         pll.create_clkout(self.cd_sys_ps,   sys_clk_freq, phase=90)
-        #pll.create_clkout(self.cd_sys2x,    2*sys_clk_freq)
-        #pll.create_clkout(self.cd_sys2x_ps, 2*sys_clk_freq, phase=90)
 
         # SDRAM clock
         self.specials += DDROutput(1, 0, platform.request("sdram_clock"), ClockSignal("sys_ps"))
-        #self.specials += DDROutput(1, 0, platform.request("sdram_clock"), ClockSignal("sys2x_ps"))
 
 # SoC ----------------------------------------------------------------------------------------------
 
@@ -117,21 +112,15 @@ class BaseSoC(SoCCore):
         # SDR SDRAM --------------------------------------------------------------------------------
         if not self.integrated_main_ram_size:
             self.submodules.sdrphy = GENSDRPHY(platform.request("sdram"))
-            #self.submodules.sdrphy = HalfRateGENSDRPHY(platform.request("sdram"))
             self.add_sdram("sdram",
                 phy                     = self.sdrphy,
                 module                  = MT48LC32M8(sys_clk_freq, "1:1"),
-                #module                  = MT48LC32M8(sys_clk_freq, "1:2"),
                 origin                  = self.mem_map["main_ram"],
                 size                    = 0x2000000,
-                l2_cache_size           = 1024,
-                l2_cache_min_data_width = 128,
+                l2_cache_size           = 0x400,
+                l2_cache_min_data_width = 0x80,
                 l2_cache_reverse        = True
             )
-
-        # No CPU, use Serial to control Wishbone bus
-        #self.submodules.serial_bridge = UARTWishboneBridge(platform.request("serial"), sys_clk_freq)
-        #self.add_wb_master(self.serial_bridge.wishbone)
 
         # FPGA identification
         self.submodules.dna = dna.DNA()
